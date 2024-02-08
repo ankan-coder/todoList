@@ -127,10 +127,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control border-dark" id="password" name="password">
+                <div id="pass"></div>
             </div>
             <div class="mb-3">
                 <label for="cpassword" class="form-label">Confirm Password</label>
                 <input type="password" class="form-control border-dark" id="cpassword" name="cpassword">
+                <div id="cpass"></div>
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">Profile Picture</label>
@@ -140,7 +142,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="reset" class="btn btn-primary">Reset</button>
         </form>
     </div>
-
+    <script type="module" src="./userValidation.js"></script>
 </body>
 
 </html>

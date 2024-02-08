@@ -8,7 +8,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $Password = md5($_POST['password']);
     $CPassword = md5($_POST['cpassword']);
 
-
     $filename = $_FILES["photo"]["name"];
     $tempname = $_FILES["photo"]["tmp_name"];
 
@@ -37,6 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else if (!move_uploaded_file($tempname, $image_path)) {
             $photoUploadError = "Error uploading the photo!";
         }
+
+        header('Location: ' . $_SERVER['REQUEST_URI']);
+        exit;
     }
 }
 ?>
@@ -111,28 +113,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form class="p-5" action="signup.php" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" required name="name">
+                <input type="text" class="form-control border-dark" id="name" required name="name">
             </div>
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" required name="username">
+                <input type="text" class="form-control border-dark" id="username" required name="username">
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" required name="email">
+                <input type="email" class="form-control border-dark" id="email" required name="email">
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
+                <input type="password" class="form-control border-dark" id="password" name="password">
             </div>
             <div class="mb-3">
                 <label for="cpassword" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="cpassword" name="cpassword">
+                <input type="password" class="form-control border-dark" id="cpassword" name="cpassword">
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">Profile Picture</label>
-                <input type="file" class="form-control" id="image" name="photo">
+                <input type="file" class="form-control border-dark" id="image" name="photo">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
             <button type="reset" class="btn btn-primary">Reset</button>

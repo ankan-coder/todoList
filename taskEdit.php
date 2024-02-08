@@ -15,23 +15,21 @@ if (isset($_GET['tid'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($tid === null) {
-        // Handle case when tid is not provided
-        // For example, redirect back to todoList.php with an error message
         exit;
     }
 
     $updatedTask = $_POST['task'];
 
     // Check whether the entered task is the same as the existing task
-    $sql_taskexists = "SELECT * FROM `tasks` WHERE `sno` = ?";
+    $sql_taskexists = "SELECT * FROM `tasks` WHERE `id` = ?";
     $stmt = $conn->prepare($sql_taskexists);
     $stmt->bind_param("i", $tid);
     $stmt->execute();
     $result = $stmt->get_result();
     $fetchedRow = $result->fetch_assoc();
 
-    if ($fetchedRow['task'] != $updatedTask) {
-        $sql_updatetask = "UPDATE `tasks` SET `task` = ? WHERE `sno` = ?";
+    if (($fetchedRow['task'] != $updatedTask) && ($updatedTask != "")) {
+        $sql_updatetask = "UPDATE `tasks` SET `task` = ? WHERE `id` = ?";
         $stmt = $conn->prepare($sql_updatetask);
         $stmt->bind_param("si", $updatedTask, $tid);
         $stmt->execute();
@@ -46,6 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $taskUpdateError = "Can't update to the same task";
     }
+
+    header('Location: ' . $_SERVER['REQUEST_URI']);
+    exit;
 }
 
 ?>
@@ -80,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <div class="container">
             <?php
-            $sql = "SELECT task FROM `tasks` WHERE `sno` = $tid";
+            $sql = "SELECT task FROM `tasks` WHERE `id` = $tid";
             $res = mysqli_query($conn, $sql);
             $row = mysqli_fetch_assoc($res);
 
@@ -89,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <form action="taskEdit.php<?php if ($tid !== null) echo '?tid=' . $tid; ?>" method="POST" enctype="multipart/form-data">
             <div class="form-group d-flex m-5">
-                <input type="text" class="form-control" id="task" aria-describedby="emailHelp" placeholder="Update task ..." name="task">
+                <input type="text" class="form-control border-primary" id="task" aria-describedby="emailHelp" value="<?php echo $row['task'] ?>" name="task">
                 <button type="submit" class="btn btn-primary mx-2">Update</button>
             </div>
         </form>

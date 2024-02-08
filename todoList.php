@@ -50,6 +50,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     } else {
                         $insertTask_error =  "Error adding task!";
                     }
+
+                    header('Location: ' . $_SERVER['REQUEST_URI']);
+                    exit;
                 }
                 break;
             case 'edit':
@@ -60,14 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (isset($_POST['id'])) {
                     $tid = $_POST['id'];
                     $tid = mysqli_real_escape_string($conn, $tid);
-                    $dltSQL = "DELETE FROM `tasks` WHERE `sno` = '$tid'";
+                    $dltSQL = "DELETE FROM `tasks` WHERE `id` = '$tid'";
                     $dltResult = mysqli_query($conn, $dltSQL);
-
-                    $renumberSQL = "SET @count = 0";
-                    $renumberResult = mysqli_query($conn, $renumberSQL);
-
-                    $updateSQL = "UPDATE `tasks` SET `sno` = @count:= @count + 1";
-                    $updateResult = mysqli_query($conn, $updateSQL);
                 }
                 break;
         }
@@ -131,11 +128,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         } ?>
                         <div class="row">
                             <div class="col">
-                                <input type="text" class="form-control" name="task" placeholder="Enter task...">
+                                <input type="text" class="form-control border-primary" name="task" placeholder="Enter task...">
                             </div>
                             <div class="col-auto">
                                 <input type="hidden" class="form-control" name="username" value="<?php echo $loggedinUsername; ?>">
-                                <button type="submit" class="btn btn-outline-primary" name="action" value="add">Add Task</button>
+                                <button type="submit" class="btn btn-primary" name="action" value="add">Add Task</button>
                             </div>
                         </div>
                 </form>
@@ -155,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         ' . $tasks['task'] . '
                                     </strong>
                                     <form action="todoList.php" method="POST">
-                                        <input type="hidden" value=' . $tasks['sno'] . ' name="id">
+                                        <input type="hidden" value=' . $tasks['id'] . ' name="id">
                                         <button type="submit" value="edit" name="action" class="btn btn-outline-dark text-dark">Edit</button>
                                         <button type="submit" value="dlt" name="action" class="btn btn-outline-dark text-dark">Delete</button>
                                     </form>
